@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+
+{% if get_flashed_messages(with_categories=True) %}
+  {% for cat, mes in get_flashed_messages(with_categories=True) %}
+    <div class="alert alert-{{cat}}" role="alert">{{mes}}</div>
+  {% endfor %}
+{% endif %}
+
+  <main class="flex-grow-1">
+    <div class="container-lg mt-3">
+      <h1>Сайт: {{name_from_urls}}</h1>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover text-nowrap" data-test="url">
+          <tbody>
+            <tr>
+              <td>ID</td>
+              <td>{{id_from_urls}}</td>
+            </tr>
+            <tr>
+              <td>Имя</td>
+              <td>{{name_from_urls}}</td>
+            </tr>
+            <tr>
+              <td>Дата создания</td>
+              <td>{{date_from_urls}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h2 class="mt-5 mb-3">Проверки</h2>
+      <form method="post" action="/urls/{{id_from_urls}}/checks">
+        <input type="submit" class="btn btn-primary" value="Запустить проверку">
+      </form>
+    
+  <div>
+    <table class="table table-bordered table-hover mt-2" data-test="checks">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Код ответа</th>
+          <th>h1</th>
+          <th>title</th>
+          <th>description</th>
+          <th>Дата создания</th>
+        </tr>
+      </thead>
+      {% if data_from_url_checks %}
+        {% for item in data_from_url_checks %}
+        <tbody>
+          <tr>
+              <th>{{item[0]}}</th>
+              <th>{{item[1]}}</th>
+              <th>{{item[2]}}</th>
+              <th>{{item[3]}}</th>
+              <th>{{item[4]}}</th>
+              <th>{{item[5]}}</th>
+          </tr>
+        {% endfor %}
+      {% endif %}
+    </table>
+  </div>
+</div>
+{%  endblock%}
