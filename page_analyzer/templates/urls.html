@@ -2,11 +2,13 @@
 
 
 {% block body %}
-{% if get_flashed_messages(with_categories=True) %}
-  {% for cat, mes in get_flashed_messages(with_categories=True) %}
-    <div class="alert alert-{{cat}}" role="alert">{{mes}}</div>
-  {% endfor %}
-{% endif %}
+
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
 <main class="flex-grow-1">
     <div class="container-lg mt-3">
       <h1>Сайты</h1>
@@ -22,16 +24,16 @@
         <th>Код ответа</th>
       </tr>
     </thead>
-    {% for url in urls %}
+    {% for url in data_urls %}
           <tbody>
             <tr>
-              <td>{{url[0]}}</td>
-              <td><a href="/urls/{{url[0]}}">{{url[1]}}</a></td>
-              {% if url[2] %}
-              <td>{{url[2]}}</td>
+              <td>{{url.id}}</td>
+              <td><a href="/urls/{{url.id}}">{{url.name}}</a></td>
+              {% if url.date %}
+              <td>{{url.date}}</td>
               {% endif %}
-              {% if url[3] %}
-              <td>{{url[3]}}</td>
+              {% if url.status %}
+              <td>{{url.status}}</td>
               {% endif %}
             </tr>
           </tbody>

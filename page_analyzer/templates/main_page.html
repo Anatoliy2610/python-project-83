@@ -3,11 +3,13 @@
 
 {% block body %}
 
-{% if get_flashed_messages(with_categories=True) %}
-  {% for cat, mes in get_flashed_messages(with_categories=True) %}
-    <div class="alert alert-{{cat}}" role="alert">{{mes}}</div>
-  {% endfor %}
-{% endif %}
+
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
 
 <main class="flex-grow-1">
   <div class="container-lg mt-3">

@@ -3,35 +3,35 @@
 
 {% block body %}
 
-{% if get_flashed_messages(with_categories=True) %}
-  {% for cat, mes in get_flashed_messages(with_categories=True) %}
-    <div class="alert alert-{{cat}}" role="alert">{{mes}}</div>
-  {% endfor %}
-{% endif %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
 
   <main class="flex-grow-1">
     <div class="container-lg mt-3">
-      <h1>Сайт: {{name_from_urls}}</h1>
+      <h1>Сайт: {{last_data_url.name}}</h1>
       <div class="table-responsive">
         <table class="table table-bordered table-hover text-nowrap" data-test="url">
           <tbody>
             <tr>
               <td>ID</td>
-              <td>{{id_from_urls}}</td>
+              <td>{{last_data_url.id}}</td>
             </tr>
             <tr>
               <td>Имя</td>
-              <td>{{name_from_urls}}</td>
+              <td>{{last_data_url.name}}</td>
             </tr>
             <tr>
               <td>Дата создания</td>
-              <td>{{date_from_urls}}</td>
+              <td>{{last_data_url.date}}</td>
             </tr>
           </tbody>
         </table>
       </div>
       <h2 class="mt-5 mb-3">Проверки</h2>
-      <form method="post" action="/urls/{{id_from_urls}}/checks">
+      <form method="post" action="/urls/{{last_data_url.id}}/checks">
         <input type="submit" class="btn btn-primary" value="Запустить проверку">
       </form>
     
@@ -47,16 +47,16 @@
           <th>Дата создания</th>
         </tr>
       </thead>
-      {% if data_from_url_checks %}
-        {% for item in data_from_url_checks %}
+      {% if last_data_url.id_checks %}
+        {% for item in all_data_url %}
         <tbody>
           <tr>
-              <th>{{item[0]}}</th>
-              <th>{{item[1]}}</th>
-              <th>{{item[2]}}</th>
-              <th>{{item[3]}}</th>
-              <th>{{item[4]}}</th>
-              <th>{{item[5]}}</th>
+              <th>{{item.id_checks}}</th>
+              <th>{{item.status}}</th>
+              <th>{{item.h1}}</th>
+              <th>{{item.title}}</th>
+              <th>{{item.description}}</th>
+              <th>{{item.date_checks}}</th>
           </tr>
         {% endfor %}
       {% endif %}
