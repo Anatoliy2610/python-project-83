@@ -28,8 +28,6 @@ def get_urls():
     conn = get_connect_db(DATABASE_URL)
     data_urls = get_all_data_for_urls(conn)
     close(conn)
-    # messages = get_flashed_messages(with_categories=True)
-    # return render_template('urls.html', data_urls=data_urls, messages=messages)
     return render_template('urls.html', data_urls=data_urls)
 
 
@@ -89,5 +87,3 @@ def get_check_url(id):
 @app.errorhandler(404)
 def not_found(error):
     return render_template('error.html'), 404
-if __name__ == '__main__':
-    app.run(debug=True)
