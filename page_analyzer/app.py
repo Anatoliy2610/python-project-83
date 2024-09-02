@@ -27,6 +27,7 @@ def get_main_page():
 def get_urls():
     conn = get_connect_db(DATABASE_URL)
     data_urls = get_all_data_for_urls(conn)
+    close(conn)
     messages = get_flashed_messages(with_categories=True)
     return render_template('urls.html', data_urls=data_urls, messages=messages)
 
