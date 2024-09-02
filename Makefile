@@ -1,4 +1,4 @@
-PORT ?= 5000
+PORT ?= 8000
 
 install:
 	poetry install
@@ -13,7 +13,13 @@ lint:
 	poetry run flake8 page_analyzer
 
 start:
-	poetry run gunicorn -b 0.0.0.0:$(PORT) page_analyzer:app
+	poetry run gunicorn -w 5 -b 0.0.0.0:$(PORT) page_analyzer:app
 
 build:
 	./build.sh
+
+roat:
+	poetry run gunicorn page_analyzer:app --preload -b 0.0.0.0:1000
+	
+# gunicorn page_analyzer:app --preload -b 0.0.0.0:1000
+# gunicorn app:application --check-config
