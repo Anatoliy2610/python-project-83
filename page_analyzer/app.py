@@ -12,15 +12,15 @@ from page_analyzer.data import (get_connect_db, close,
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 load_dotenv()
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 DATABASE_URL = os.getenv('DATABASE_URL')
-# conn = psycopg2.connect(DATABASE_URL)
 
 
 @app.route('/')
 def get_main_page():
-    return render_template('main_page.html')
+    messages = get_flashed_messages(with_categories=True)
+    return render_template('main_page.html', messages=messages)
 
 
 @app.get('/urls')
@@ -28,8 +28,9 @@ def get_urls():
     conn = get_connect_db(DATABASE_URL)
     data_urls = get_all_data_for_urls(conn)
     close(conn)
-    messages = get_flashed_messages(with_categories=True)
-    return render_template('urls.html', data_urls=data_urls, messages=messages)
+    # messages = get_flashed_messages(with_categories=True)
+    # return render_template('urls.html', data_urls=data_urls, messages=messages)
+    return render_template('urls.html', data_urls=data_urls)
 
 
 @app.post('/urls')
@@ -50,7 +51,7 @@ def post_urls():
             flash('Страница уже существует', 'info')
             return redirect(url_for('get_urls_id', id=data_urls[0]))
     flash('Некорректный URL', 'danger')
-    return render_template('main_page.html', value=url)
+    return redirect('/')
 
 
 @app.route('/urls/<int:id>')
@@ -88,5 +89,5 @@ def get_check_url(id):
 @app.errorhandler(404)
 def not_found(error):
     return render_template('error.html'), 404
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
