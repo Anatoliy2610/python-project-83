@@ -76,6 +76,3 @@ def add_data_db_url_checks(conn, value):
     with conn.cursor() as cursor:
         cursor.execute(sql, (value + [new_date]))
         commit(conn)
-# DATABASE_URL = os.getenv('DATABASE_URL')
-# conn = psycopg2.connect(DATABASE_URL)
-# print(get_data_url(conn, 1))

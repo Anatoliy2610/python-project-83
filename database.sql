@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS urls (
     name VARCHAR(255) NOT NULL UNIQUE,
     created_at DATE NOT NULL
 );
+
 drop table url_checks;
 CREATE TABLE IF NOT EXISTS url_checks (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
