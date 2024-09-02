@@ -12,8 +12,7 @@ from page_analyzer.data import (get_connect_db, close,
 
 
 app = Flask(__name__)
-# app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['SECRET_KEY'] = '1234121231'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 load_dotenv()
 DATABASE_URL = os.getenv('DATABASE_URL')
 # conn = psycopg2.connect(DATABASE_URL)
