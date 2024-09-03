@@ -65,24 +65,45 @@ def get_urls_id(id):
                            messages=messages)
 
 
+# @app.post('/urls/<int:id>/checks')
+# def get_check_url(id):
+#     conn = get_connect_db(DATABASE_URL)
+#     _, last_data_url = get_data_url(conn, id)
+#     try:
+#         response = requests.get(last_data_url[1])
+#         response.raise_for_status()
+#     except requests.exceptions.RequestException:
+#         flash('Произошла ошибка при проверке', 'danger')
+#         return redirect(url_for('get_urls_id', id=id))
+#     status_code = response.status_code
+#     html_text = response.text
+#     h1, title_text, description = get_data_html(html_text)
+#     value = [last_data_url[0], status_code, h1, title_text, description]
+#     add_data_db_url_checks(conn, value)
+#     close(conn)
+#     flash('Страница успешно проверена', 'success')
+#     return redirect(url_for('get_urls_id', id=id))
+
+
 @app.post('/urls/<int:id>/checks')
 def get_check_url(id):
-    conn = get_connect_db(DATABASE_URL)
-    _, last_data_url = get_data_url(conn, id)
     try:
+        conn = get_connect_db(DATABASE_URL)
+        _, last_data_url = get_data_url(conn, id)
         response = requests.get(last_data_url[1])
         response.raise_for_status()
+        status_code = response.status_code
+        html_text = response.text
+        h1, title_text, description = get_data_html(html_text)
+        value = [last_data_url[0], status_code, h1, title_text, description]
+        add_data_db_url_checks(conn, value)
+        close(conn)
+        flash('Страница успешно проверена', 'success')
+        return redirect(url_for('get_urls_id', id=id))
     except requests.exceptions.RequestException:
         flash('Произошла ошибка при проверке', 'danger')
         return redirect(url_for('get_urls_id', id=id))
-    status_code = response.status_code
-    html_text = response.text
-    h1, title_text, description = get_data_html(html_text)
-    value = [last_data_url[0], status_code, h1, title_text, description]
-    add_data_db_url_checks(conn, value)
-    close(conn)
-    flash('Страница успешно проверена', 'success')
-    return redirect(url_for('get_urls_id', id=id))
+    
 
 
 @app.errorhandler(404)
