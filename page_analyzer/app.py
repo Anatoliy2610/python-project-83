@@ -50,7 +50,7 @@ def post_urls():
             return redirect(url_for('get_urls_id', id=data_urls[0]))
     flash('Некорректный URL', 'danger')
     messages = get_flashed_messages(with_categories=True)
-    return render_template('main_page.html', messages=messages)
+    return render_template('main_page.html', messages=messages), 422
 
 
 @app.route('/urls/<int:id>')
