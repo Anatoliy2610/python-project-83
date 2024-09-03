@@ -74,6 +74,17 @@ def add_data_db_url_checks(conn, value):
 VALUES (%s, %s, %s, %s, %s, %s);'''
     new_date = date.today()
     value.append(new_date)
+    for item in value:
+        if item is None or len(item) > 255:
+            check_data(item)
     with conn.cursor() as cursor:
         cursor.execute(sql, value)
         commit(conn)
+
+
+def check_data(value):
+    if value is None:
+        new_value = ''
+    elif len(value) > 255:
+        new_value = value[:255]
+    return new_value
