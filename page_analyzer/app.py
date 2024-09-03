@@ -90,8 +90,3 @@ def get_check_url(id):
     except requests.exceptions.RequestException:
         flash('Произошла ошибка при проверке', 'danger')
         return redirect(url_for('get_urls_id', id=id))
-
-
-@app.errorhandler(500)
-def not_found(error):
-    return render_template('error_500.html'), 500
