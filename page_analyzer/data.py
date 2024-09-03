@@ -17,14 +17,14 @@ def close(conn):
 
 def get_all_data_for_urls(conn):
     sql = '''SELECT
-    urls.id as id,
-    urls.name as name,
-    MAX(url_checks.created_at) as date,
-    url_checks.status_code as status
-    FROM urls
-    LEFT JOIN url_checks ON urls.id = url_checks.url_id
-    GROUP BY urls.id, urls.name, url_checks.status_code
-    ORDER BY urls.id DESC;'''
+urls.id as id,
+urls.name as name,
+MAX(url_checks.created_at) as date,
+url_checks.status_code as status
+FROM urls
+LEFT JOIN url_checks ON urls.id = url_checks.url_id
+GROUP BY urls.id, urls.name, url_checks.status_code
+ORDER BY urls.id DESC;'''
     with conn.cursor(cursor_factory=NamedTupleCursor) as cursor:
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -43,12 +43,12 @@ def get_data_url_for_urls(conn, url):
 
 def get_data_url(conn, id):
     sql = f'''SELECT urls.id AS id, urls.name AS name,
-    urls.created_at AS date, url_checks.id AS id_checks,
-    url_checks.status_code AS status, url_checks.h1 AS h1,
-    url_checks.title AS title, url_checks.description AS description,
-    url_checks.created_at AS date_checks
-    FROM urls LEFT JOIN url_checks ON urls.id=url_checks.url_id
-    WHERE urls.id={id} ORDER BY id_checks DESC;'''
+urls.created_at AS date, url_checks.id AS id_checks,
+url_checks.status_code AS status, url_checks.h1 AS h1,
+url_checks.title AS title, url_checks.description AS description,
+url_checks.created_at AS date_checks
+FROM urls LEFT JOIN url_checks ON urls.id=url_checks.url_id
+WHERE urls.id={id} ORDER BY id_checks DESC;'''
     with conn.cursor(cursor_factory=NamedTupleCursor) as cursor:
         cursor.execute(sql)
         all_data = cursor.fetchall()
@@ -70,8 +70,8 @@ def add_data_db_urls(conn, value):
 
 def add_data_db_url_checks(conn, value):
     sql = '''INSERT INTO url_checks
-    (url_id, status_code, h1, title, description, created_at)
-    VALUES (%s, %s, %s, %s, %s, %s);'''
+(url_id, status_code, h1, title, description, created_at)
+VALUES (%s, %s, %s, %s, %s, %s);'''
     new_date = date.today()
     with conn.cursor() as cursor:
         cursor.execute(sql, (value + [new_date]))
