@@ -55,34 +55,21 @@ def post_urls():
 
 @app.route('/urls/<int:id>')
 def get_urls_id(id):
-    conn = get_connect_db(DATABASE_URL)
-    all_data_url, last_data_url = get_data_url(conn, id)
-    messages = get_flashed_messages(with_categories=True)
-    close(conn)
-    return render_template('urls_id.html',
+    try:
+        conn = get_connect_db(DATABASE_URL)
+        all_data_url, last_data_url = get_data_url(conn, id)
+        if not all_data_url:
+            close(conn)
+            return render_template('error_404.html'), 404
+        else:
+            messages = get_flashed_messages(with_categories=True)
+            close(conn)
+            return render_template('urls_id.html',
                            all_data_url=all_data_url,
                            last_data_url=last_data_url,
                            messages=messages)
-
-
-# @app.post('/urls/<int:id>/checks')
-# def get_check_url(id):
-#     conn = get_connect_db(DATABASE_URL)
-#     _, last_data_url = get_data_url(conn, id)
-#     try:
-#         response = requests.get(last_data_url[1])
-#         response.raise_for_status()
-#     except requests.exceptions.RequestException:
-#         flash('Произошла ошибка при проверке', 'danger')
-#         return redirect(url_for('get_urls_id', id=id))
-#     status_code = response.status_code
-#     html_text = response.text
-#     h1, title_text, description = get_data_html(html_text)
-#     value = [last_data_url[0], status_code, h1, title_text, description]
-#     add_data_db_url_checks(conn, value)
-#     close(conn)
-#     flash('Страница успешно проверена', 'success')
-#     return redirect(url_for('get_urls_id', id=id))
+    except Exception:
+        render_template('error_500.html'), 500
 
 
 @app.post('/urls/<int:id>/checks')
@@ -104,13 +91,3 @@ def get_check_url(id):
         flash('Произошла ошибка при проверке', 'danger')
         return redirect(url_for('get_urls_id', id=id))
     
-
-
-@app.errorhandler(404)
-def not_found(error):
-    return render_template('error.html'), 404
-
-
-@app.errorhandler(500)
-def not_found(error):
-    return render_template('error.html'), 500
