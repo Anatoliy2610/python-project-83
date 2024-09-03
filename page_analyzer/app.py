@@ -39,15 +39,15 @@ def post_urls():
         data_url = get_data_url_for_urls(conn, url_valid)
         if not data_url:
             add_data_db_urls(conn, url_valid)
-            data_urls = get_data_url_for_urls(conn, url_valid)
+            data_url = get_data_url_for_urls(conn, url_valid)
             close(conn)
-            flash('Cтраница успешно добавлена', 'success')
-            return redirect(url_for('get_urls_id', id=data_urls[0]))
+            flash('Страница успешно добавлена', 'success')
+            return redirect(url_for('get_urls_id', id=data_url[0]))
         else:
-            data_urls = get_data_url_for_urls(conn, url)
+            data_url = get_data_url_for_urls(conn, url)
             close(conn)
             flash('Страница уже существует', 'info')
-            return redirect(url_for('get_urls_id', id=data_urls[0]))
+            return redirect(url_for('get_urls_id', id=data_url[0]))
     flash('Некорректный URL', 'danger')
     messages = get_flashed_messages(with_categories=True)
     return render_template('main_page.html', messages=messages, value=url), 422
@@ -65,9 +65,9 @@ def get_urls_id(id):
             messages = get_flashed_messages(with_categories=True)
             close(conn)
             return render_template('urls_id.html',
-                           all_data_url=all_data_url,
-                           last_data_url=last_data_url,
-                           messages=messages)
+                                   all_data_url=all_data_url,
+                                   last_data_url=last_data_url,
+                                   messages=messages)
     except Exception:
         render_template('error_500.html'), 500
 
@@ -90,4 +90,3 @@ def get_check_url(id):
     except requests.exceptions.RequestException:
         flash('Произошла ошибка при проверке', 'danger')
         return redirect(url_for('get_urls_id', id=id))
-    
