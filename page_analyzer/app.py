@@ -49,7 +49,8 @@ def post_urls():
             flash('Страница уже существует', 'info')
             return redirect(url_for('get_urls_id', id=data_urls[0]))
     flash('Некорректный URL', 'danger')
-    return redirect('/')
+    messages = get_flashed_messages(with_categories=True)
+    return render_template('main_page.html', messages=messages)
 
 
 @app.route('/urls/<int:id>')
