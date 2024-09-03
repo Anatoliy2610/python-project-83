@@ -42,11 +42,11 @@ def post_urls():
             data_url = get_data_url_for_urls(conn, url_valid)
             close(conn)
             flash('Страница успешно добавлена', 'success')
-            return redirect(url_for('get_urls_id', id=data_url[0]))
+            return redirect(url_for('get_urls_id', id=data_url.id))
         else:
             close(conn)
             flash('Страница уже существует', 'info')
-            return redirect(url_for('get_urls_id', id=data_url[0]))
+            return redirect(url_for('get_urls_id', id=data_url.id))
     flash('Некорректный URL', 'danger')
     messages = get_flashed_messages(with_categories=True)
     return render_template('main_page.html', messages=messages, value=url), 422
@@ -76,12 +76,12 @@ def get_check_url(id):
     try:
         conn = get_connect_db(DATABASE_URL)
         _, last_data_url = get_data_url(conn, id)
-        response = requests.get(last_data_url[1])
+        response = requests.get(last_data_url.name)
         response.raise_for_status()
         status_code = response.status_code
         html_text = response.text
         h1, title_text, description = get_data_html(html_text)
-        value = [last_data_url[0], status_code, h1, title_text, description]
+        value = [last_data_url.id, status_code, h1, title_text, description]
         add_data_db_url_checks(conn, value)
         close(conn)
         flash('Страница успешно проверена', 'success')
