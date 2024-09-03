@@ -21,3 +21,6 @@ def get_data_html(html_text):
             description = teg.get('content')
             break
     return h1, title, description
+# http://page.com/users/1
+# print(validate('http://page.com/users/1'))
+# http://page.com

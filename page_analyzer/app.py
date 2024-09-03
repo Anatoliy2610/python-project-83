@@ -44,7 +44,6 @@ def post_urls():
             flash('Страница успешно добавлена', 'success')
             return redirect(url_for('get_urls_id', id=data_url[0]))
         else:
-            data_url = get_data_url_for_urls(conn, url)
             close(conn)
             flash('Страница уже существует', 'info')
             return redirect(url_for('get_urls_id', id=data_url[0]))
