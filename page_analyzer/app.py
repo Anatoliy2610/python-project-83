@@ -39,10 +39,10 @@ def post_urls():
         data_url = get_data_url_for_urls(conn, url_valid)
         if not data_url:
             add_data_db_urls(conn, url_valid)
-            data_url = get_data_url_for_urls(conn, url_valid)
+            new_data_url = get_data_url_for_urls(conn, url_valid)
             close(conn)
             flash('Страница успешно добавлена', 'success')
-            return redirect(url_for('get_urls_id', id=data_url.id))
+            return redirect(url_for('get_urls_id', id=new_data_url.id))
         else:
             close(conn)
             flash('Страница уже существует', 'info')
@@ -82,6 +82,7 @@ def get_check_url(id):
         html_text = response.text
         h1, title_text, description = get_data_html(html_text)
         value = [last_data_url.id, status_code, h1, title_text, description]
+        conn = get_connect_db(DATABASE_URL)
         add_data_db_url_checks(conn, value)
         close(conn)
         flash('Страница успешно проверена', 'success')
@@ -89,3 +90,8 @@ def get_check_url(id):
     except requests.exceptions.RequestException:
         flash('Произошла ошибка при проверке', 'danger')
         return redirect(url_for('get_urls_id', id=id))
+
+
+@app.errorhandler(500)
+def not_found(error):
+    return render_template('error_500.html'), 500

@@ -73,6 +73,7 @@ def add_data_db_url_checks(conn, value):
 (url_id, status_code, h1, title, description, created_at)
 VALUES (%s, %s, %s, %s, %s, %s);'''
     new_date = date.today()
+    value.append(new_date)
     with conn.cursor() as cursor:
-        cursor.execute(sql, (value + [new_date]))
+        cursor.execute(sql, value)
         commit(conn)
