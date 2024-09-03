@@ -19,8 +19,7 @@ DATABASE_URL = os.getenv('DATABASE_URL')
 
 @app.route('/')
 def get_main_page():
-    messages = get_flashed_messages(with_categories=True)
-    return render_template('main_page.html', messages=messages)
+    return render_template('main_page.html')
 
 
 @app.get('/urls')
@@ -34,12 +33,13 @@ def get_urls():
 @app.post('/urls')
 def post_urls():
     url = request.form['url']
-    if validate(url):
+    url_valid = validate(url)
+    if url_valid:
         conn = get_connect_db(DATABASE_URL)
-        data_url = get_data_url_for_urls(conn, url)
+        data_url = get_data_url_for_urls(conn, url_valid)
         if not data_url:
-            add_data_db_urls(conn, url)
-            data_urls = get_data_url_for_urls(conn, url)
+            add_data_db_urls(conn, url_valid)
+            data_urls = get_data_url_for_urls(conn, url_valid)
             close(conn)
             flash('Cтраница успешно добавлена', 'success')
             return redirect(url_for('get_urls_id', id=data_urls[0]))
@@ -88,3 +88,8 @@ def get_check_url(id):
 @app.errorhandler(404)
 def not_found(error):
     return render_template('error.html'), 404
+
+
+@app.errorhandler(500)
+def not_found(error):
+    return render_template('error.html'), 500

@@ -1,10 +1,12 @@
 import validators
 from bs4 import BeautifulSoup
+from urllib.parse import urlparse
 
 
 def validate(url):
     if len(url) <= 255 and len(url) > 0 and validators.url(url):
-        return True
+        url_parse = urlparse(url)
+        return (url_parse.scheme + '://' + url_parse.netloc)
     return False
 
 
