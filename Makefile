@@ -17,9 +17,3 @@ start:
 
 build:
 	./build.sh
-
-roat:
-	poetry run gunicorn page_analyzer:app --preload -b 0.0.0.0:1000
-	
-# gunicorn page_analyzer:app --preload -b 0.0.0.0:1000
-# gunicorn app:application --check-config
