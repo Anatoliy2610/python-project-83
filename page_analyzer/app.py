@@ -11,7 +11,6 @@ from page_analyzer import data
 app = Flask(__name__)
 load_dotenv()
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['DATABASE_URL'] = os.getenv('DATABASE_URL')
 
 
 @app.route('/')
@@ -53,7 +52,7 @@ def post_urls():
 def get_urls_id(id):
     try:
         conn = data.get_connect_db(app)
-        all_data_url, last_data_url = data.get_data_url(conn, id)
+        all_data_url, last_data_url = data.get_urls_with_checks(conn, id)
         if not all_data_url:
             data.close(conn)
             return render_template('error_404.html'), 404

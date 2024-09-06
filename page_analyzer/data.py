@@ -1,10 +1,12 @@
 import psycopg2
 from psycopg2.extras import NamedTupleCursor
 from datetime import date
+import os
 
 
-def get_connect_db(db_data):
-    return psycopg2.connect(db_data)
+def get_connect_db(app):
+    app.config['DATABASE_URL'] = os.getenv('DATABASE_URL')
+    return psycopg2.connect(app.config['DATABASE_URL'])
 
 
 def commit(conn):

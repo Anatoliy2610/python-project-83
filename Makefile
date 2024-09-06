@@ -1,4 +1,4 @@
-PORT ?= 8000
+PORT ?= 8080
 
 install:
 	poetry install -n -v --no-root
