@@ -32,7 +32,7 @@ ORDER BY urls.id DESC;'''
         return result
 
 
-def get_data_url_for_urls(conn, url):
+def get_url_by_name(conn, url):
     sql = f"SELECT * FROM urls WHERE name='{url}';"
     with conn.cursor(cursor_factory=NamedTupleCursor) as cursor:
         cursor.execute(sql)
@@ -41,7 +41,16 @@ def get_data_url_for_urls(conn, url):
         return result
 
 
-def get_data_url(conn, id):
+def get_url_by_id(conn, id):
+    sql = f"SELECT * FROM urls WHERE id={id};"
+    with conn.cursor(cursor_factory=NamedTupleCursor) as cursor:
+        cursor.execute(sql)
+        result = cursor.fetchone()
+        commit(conn)
+        return result
+
+
+def get_urls_with_checks(conn, id):
     sql = f'''SELECT urls.id AS id, urls.name AS name,
 urls.created_at AS date, url_checks.id AS id_checks,
 url_checks.status_code AS status, url_checks.h1 AS h1,
@@ -60,7 +69,7 @@ WHERE urls.id={id} ORDER BY id_checks DESC;'''
     return all_data, last_data
 
 
-def add_data_db_urls(conn, value):
+def insert_url(conn, value):
     sql = "INSERT INTO urls (name, created_at) VALUES (%s, %s);"
     new_date = date.today()
     with conn.cursor() as cursor:
@@ -68,7 +77,7 @@ def add_data_db_urls(conn, value):
         commit(conn)
 
 
-def add_data_db_url_checks(conn, value):
+def insert_url_checks(conn, value):
     sql = '''INSERT INTO url_checks
 (url_id, status_code, h1, title, description, created_at)
 VALUES (%s, %s, %s, %s, %s, %s);'''

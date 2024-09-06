@@ -1,6 +1,7 @@
 import validators
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
+import requests
 
 
 def validate(url):
@@ -21,3 +22,12 @@ def get_data_html(html_text):
             description = teg.get('content')
             break
     return h1, title, description
+
+
+def get_data_url_checks(data_url):
+    response = requests.get(data_url.name)
+    response.raise_for_status()
+    status_code = response.status_code
+    html_text = response.text
+    h1, title_text, description = get_data_html(html_text)
+    return [data_url.id, status_code, h1, title_text, description]
